@@ -1,0 +1,65 @@
+type TypeWhereInput {
+  AND: [TypeWhereInput]
+  OR: [TypeWhereInput]
+ 
+  field: String
+  field_not: String
+  field_contains: String
+  field_not_contains: String
+  field_starts_with: String
+  field_not_starts_with: String
+  field_ends_with: String
+  field_not_ends_with: String
+  field_lt: String
+  field_lte: String
+  field_gt: String
+  field_gte: String
+  field_in: [String]
+  field_not_in: [String]
+
+  field: Integer
+  field_not: Integer
+  field_lt: Integer
+  field_lte: Integer
+  field_gt: Integer
+  field_gte: Integer
+  field_in: [Integer]
+  field_not_in: [Integer]
+   
+  field: Float
+  field_not: Float
+  field_lt: Float
+  field_lte: Float
+  field_gt: Float
+  field_gte: Float
+  field_in: [Float]
+  field_not_in: [Float]
+  
+  field: Boolean
+  field_not: Boolean
+  
+  field: DateTime
+  field_not: DateTime
+  field_in: [DateTime]
+  field_not_in: [DateTime]
+  field_lt: DateTime
+  field_lte: DateTime
+  field_gt: DateTime
+  field_gte: DateTime
+  
+  field: Enum
+  field_not: Enum
+  field_in: [Enum]
+  field_not_in: [Enum]
+  
+  field_contains: T
+  field_contains_every: [T]
+  field_contains_some: [T]
+ 
+  field_every: FilterCondition
+  field_some: FilterCondition
+  field_none: FilterCondition
+  field_is_null: Boolean
+ 
+  field: UserWhereInput
+}

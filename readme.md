@@ -1,0 +1,1 @@
+GraphQL schema generator based on openCRUD standard
