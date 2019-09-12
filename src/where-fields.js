@@ -63,6 +63,28 @@ module.exports = {
     `\t${name}_gte: DateTime\n`
   },
 
+  date: (name) => {
+    return `\t${name}: Date\n` +
+    `\t${name}_not: Date\n` +
+    `\t${name}_in: [Date]\n` +
+    `\t${name}_not_in: [Date]\n` +
+    `\t${name}_lt: Date\n` +
+    `\t${name}_lte: Date\n` +
+    `\t${name}_gt: Date\n` +
+    `\t${name}_gte: Date\n`
+  },
+
+  time: (name) => {
+    return `\t${name}: Time\n` +
+    `\t${name}_not: Time\n` +
+    `\t${name}_in: [Time]\n` +
+    `\t${name}_not_in: [Time]\n` +
+    `\t${name}_lt: Time\n` +
+    `\t${name}_lte: Time\n` +
+    `\t${name}_gt: Time\n` +
+    `\t${name}_gte: Time\n`
+  },
+
   enum: (name) => {
     return `\t${name}: Enum\n` +
     `\t${name}_not: Enum\n` +

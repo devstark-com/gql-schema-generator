@@ -1,0 +1,7 @@
+type User {
+  id: ID!
+  name: String!,
+  relation: Relation!
+  createdAt: Date!,
+  updatedAt: Date
+}

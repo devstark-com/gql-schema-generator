@@ -1,6 +1,9 @@
 const inquirer = require('inquirer')
+const fs = require('fs')
 
 module.exports = async () => {
+  inquirer.registerPrompt('fuzzypath', require('inquirer-fuzzy-path'))
+
   const data = await inquirer.prompt([{
     type: 'input',
     name: 'typeName',
@@ -8,23 +11,13 @@ module.exports = async () => {
     default: 'User',
     validate: (input) => input ? true : 'Type name required'
   }, {
-    type: 'editor',
     name: 'typeFields',
-    message: `Specify new type fields in format: ${'field:type, filed1:type, ...'.cyan}\n` +
-      `  ${'Id:ID!, createAt:DateTime!'.cyan} and ${'updatedAt:DateTime!'.cyan} will be added by default.\n` +
-      `  You may prevent adding this fields by ${'noId, noCreatedAt'.cyan} and ${'noUpdatedAt'.cyan} >`,
-    default: 'name: String,\nage: Integer,\nparent: User',
-    validate: (input) => input ? true : 'At least one field is required',
-    filter: (input) => input.replace(/\n/g, '').split(',').map(s => {
-      const [name, type] = s.split(':')
-
-      if (!type) return { name }
-
-      return {
-        name: name.trim(),
-        type: type.trim()
-      }
-    })
+    type: 'fuzzypath',
+    excludePath: nodePath => ['node_modules', '.git', '.DS_Store'].some(path => nodePath.startsWith(path)),
+    itemType: 'file',
+    message: 'Select your type file >',
+    suggestOnly: false,
+    filter: parseSelectedType
   }, {
     type: 'checkbox',
     name: 'oneRelations',
@@ -43,21 +36,6 @@ module.exports = async () => {
     message: 'Which of fields unique >',
     choices: (prevAnswers) => prevAnswers.typeFields.map(f => f.name)
   }])
-
-  const defaultFields = {
-    noId: data.typeFields.findIndex(f => f.name.toLowerCase() === 'noid'),
-    createdAt: data.typeFields.findIndex(f => f.name.toLowerCase() === 'createdat'),
-    updatedAt: data.typeFields.findIndex(f => f.name.toLowerCase() === 'updatedat')
-  }
-
-  if (~defaultFields.noId) data.typeFields.splice(defaultFields.noId, 1)
-  else data.typeFields.unshift({ name: 'id', type: 'ID', unique: true, auto: true })
-
-  if (~defaultFields.createdAt) data.typeFields.splice(defaultFields.createdAt, 1)
-  else data.typeFields.push({ name: 'createdAt', type: 'DateTime', auto: true })
-
-  if (~defaultFields.updatedAt) data.typeFields.splice(defaultFields.updatedAt, 1)
-  else data.typeFields.push({ name: 'updatedAt', type: 'DateTime', auto: true })
 
   if (data.oneRelations) {
     data.oneRelations.forEach(r => {
@@ -98,5 +76,23 @@ const areUncommonTypesSpecified = (typeFields) => {
       'uuid',
       'json'
     ].includes(f.type.toLowerCase())
+  })
+}
+
+function parseSelectedType (pathToFile) {
+  const specifiedType = fs.readFileSync(pathToFile).toString()
+
+  let typeParts = specifiedType.split('\n')
+  typeParts.pop()
+  typeParts.shift()
+
+  typeParts = typeParts.map(part => part.replace(/(,|!)/g, ''))
+
+  return typeParts.map(part => {
+    const [name, type] = part.split(':')
+    return {
+      name: name.trim(),
+      type: type.trim()
+    }
   })
 }

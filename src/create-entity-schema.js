@@ -22,8 +22,8 @@ module.exports = async () => {
   newType += `\ninput ${data.typeName}CreateInput {\n`
 
   data.typeFields.forEach(f => {
-    if (f.relation || f.auto) newType += `\t${f.name}: ${f.type}\n`
-    else newType += `\t${f.name}: ${f.type}!\n`
+    if (['createdat', 'updatedat', 'id'].includes(f.name.toLowerCase())) return
+    newType += `\t${f.name}: ${f.type}${f.relation ? '!' : ''}\n`
   })
 
   newType += '}\n'
@@ -32,8 +32,8 @@ module.exports = async () => {
   newType += `\ninput ${data.typeName}UpdateInput {\n`
 
   data.typeFields.forEach(f => {
-    if (f.relation) newType += `\t${f.name}: ${f.type}\n`
-    else newType += `\t${f.name}: ${f.type}\n`
+    if (['createdat', 'updatedat', 'id'].includes(f.name.toLowerCase())) return
+    newType += `\t${f.name}: ${f.type}\n`
   })
 
   newType += '}\n'
@@ -73,5 +73,8 @@ module.exports = async () => {
 
   newType += '}\n'
 
-  return newType
+  return {
+    newType,
+    name: data.typeName
+  }
 }
