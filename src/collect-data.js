@@ -22,14 +22,14 @@ module.exports = async () => {
     type: 'checkbox',
     name: 'oneRelations',
     message: 'Which of fields has ONE relation >',
-    choices: (prevAnswers) => prevAnswers.typeFields.map(f => f.name),
-    when: (prevAnswers) => areUncommonTypesSpecified(prevAnswers.typeFields)
+    choices: showUncommonTypes,
+    when: showRelationsPrompt
   }, {
     type: 'checkbox',
     name: 'manyRelations',
     message: 'Which of fields has MANY relations >',
-    choices: (prevAnswers) => prevAnswers.typeFields.map(f => f.name),
-    when: (prevAnswers) => areUncommonTypesSpecified(prevAnswers.typeFields)
+    choices: showUncommonTypes,
+    when: showRelationsPrompt
   }, {
     type: 'checkbox',
     name: 'unique',
@@ -61,25 +61,36 @@ module.exports = async () => {
   return data
 }
 
-const areUncommonTypesSpecified = (typeFields) => {
+const commonTypes = [
+  'id',
+  'uuid',
+  'string',
+  'integer',
+  'float',
+  'boolean',
+  'datetime',
+  'date',
+  'time',
+  'enum'
+]
+
+const showRelationsPrompt = ({ typeFields, oneRelations }) => {
   return typeFields.some(f => {
     if (!f.type) return false
 
-    return ![
-      'string',
-      'int',
-      'float',
-      'boolean',
-      'id',
-      'date',
-      'datetime',
-      'uuid',
-      'json'
-    ].includes(f.type.toLowerCase())
+    return !commonTypes.includes(f.type.toLowerCase()) &&
+    showUncommonTypes({ typeFields, oneRelations }).length > 0
   })
 }
 
-function parseSelectedType (pathToFile) {
+const showUncommonTypes = ({ typeFields, oneRelations }) => {
+  return typeFields
+    .filter(f => !commonTypes.includes(f.type.toLowerCase()))
+    .filter(f => !oneRelations || !oneRelations.includes(f.name.toLowerCase()))
+    .map(f => f.name)
+}
+
+const parseSelectedType = (pathToFile) => {
   const specifiedType = fs.readFileSync(pathToFile).toString()
 
   let typeParts = specifiedType.split('\n')
