@@ -25,6 +25,23 @@ module.exports = {
     `\t${name}_not_in: [String]\n`
   },
 
+  json: (name) => {
+    return `\t${name}: json\n` +
+    `\t${name}_not: json\n` +
+    `\t${name}_contains: json\n` +
+    `\t${name}_not_contains: json\n` +
+    `\t${name}_starts_with: json\n` +
+    `\t${name}_not_starts_with: json\n` +
+    `\t${name}_ends_with: json\n` +
+    `\t${name}_not_ends_with: json\n` +
+    `\t${name}_lt: json\n` +
+    `\t${name}_lte: json\n` +
+    `\t${name}_gt: json\n` +
+    `\t${name}_gte: json\n` +
+    `\t${name}_in: [json]\n` +
+    `\t${name}_not_in: [json]\n`
+  },
+
   integer: (name) => {
     return `\t${name}: Integer\n` +
     `\t${name}_not: Integer\n` +

@@ -71,7 +71,8 @@ const commonTypes = [
   'datetime',
   'date',
   'time',
-  'enum'
+  'enum',
+  'json'
 ]
 
 const showRelationsPrompt = ({ typeFields, oneRelations }) => {
