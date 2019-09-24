@@ -29,5 +29,13 @@
     "inquirer": "^6.5.0",
     "inquirer-fuzzy-path": "^2.1.0",
     "minimist": "^1.2.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devstark-com/gql-schema-generator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/devstark-com/gql-schema-generator/issues"
+  },
+  "homepage": "https://github.com/devstark-com/gql-schema-generator#readme"
 }
