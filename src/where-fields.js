@@ -1,5 +1,10 @@
 module.exports = {
-  id: function id (name) { return this.uuid(name) },
+  id: (name) => {
+    return `\t${name}: id\n` +
+    `\t${name}_not: id\n` +
+    `\t${name}_in: [id]\n` +
+    `\t${name}_not_in: [id]\n`
+  },
 
   uuid: (name) => {
     return `\t${name}: uuid\n` +
